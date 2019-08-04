@@ -1,0 +1,23 @@
+{
+    "name": "steedphp/framework",
+    "type": "library",
+    "description": "An efficient swoole framework",
+    "keywords" : ["swoole", "framework", "async","steedphp"],
+    "homepage" : "https://www.steedphp.com/",
+    "license" : "MIT",
+    "authors": [
+        {
+            "name": "Loouss",
+            "email": "Loouss.ls@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "ext-swoole": ">=4.0.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Steed\\": "src/"
+        }
+    }
+}
