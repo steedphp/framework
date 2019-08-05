@@ -13,7 +13,8 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "ext-swoole": ">=4.0.3"
+        "ext-swoole": ">=4.0.3",
+        "psr/container": "^1.0"
     },
     "autoload": {
         "psr-4": {
