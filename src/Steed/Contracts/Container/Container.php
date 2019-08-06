@@ -19,11 +19,12 @@ interface Container extends ContainerInterface
     /**
      * Register an existing instance as shared in the container.
      *
-     * @param  string  $abstract
-     * @param  mixed   $instance
+     * @param string $abstract
+     * @param mixed $instance
      * @return mixed
      */
     public function instance($abstract, $instance);
+
     /**
      * Clear container instance
      * @return mixed
