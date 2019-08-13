@@ -2,7 +2,9 @@
 
 namespace Steed\Swoole;
 
-class SwooleManager
+use Steed\Contracts\Swoole\SwooleManager as SwooleManagerContracts;
+
+class SwooleManager implements SwooleManagerContracts
 {
 
 }

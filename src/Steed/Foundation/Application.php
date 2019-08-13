@@ -2,7 +2,9 @@
 
 namespace Steed\Container;
 
-class Application
+use Steed\Contracts\Foundation\Application as ApplicationContract;
+
+class Application implements ApplicationContract
 {
 
 }
