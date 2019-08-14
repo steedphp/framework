@@ -38,5 +38,19 @@ class Container implements ContainerContracts
         return static::$instance;
     }
 
+    public function singleton($abstract, $concrete = null)
+    {
+
+    }
+
+    public function get($abstract)
+    {
+
+    }
+
+    public function has($abstract)
+    {
+
+    }
 
 }
