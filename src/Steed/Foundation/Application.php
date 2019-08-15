@@ -3,6 +3,8 @@
 namespace Steed\Container;
 
 use Steed\Contracts\Foundation\Application as ApplicationContract;
+use Steed\Swoole\SwooleEvent;
+use Swoole\Server;
 
 class Application implements ApplicationContract
 {
@@ -26,7 +28,7 @@ class Application implements ApplicationContract
     {
         $swooleServer = Container::getInstance()->get(\Steed\Contracts\Swoole\SwooleManager::class);
 
-
+        $this->registerDefaultSwooleEvent($swooleServer);
     }
 
     protected function registerSingleton()
@@ -39,9 +41,13 @@ class Application implements ApplicationContract
         }
     }
 
-    protected function registerDefaultSwooleEvent()
+    protected function registerDefaultSwooleEvent(Server $server): void
     {
+        $swooleEvent = new SwooleEvent();
 
+        foreach ($swooleEvent->event as $event) {
+            $server->on($event, [$swooleEvent, $event]);
+        }
     }
 
 
