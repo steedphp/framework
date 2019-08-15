@@ -8,7 +8,7 @@ interface Container extends ContainerInterface
 {
 
     /**
-     * Register a shared binding in the container.
+     * 单例注册到容器中
      *
      * @param string $abstract
      * @param \Closure|string|null $concrete
@@ -17,16 +17,24 @@ interface Container extends ContainerInterface
     public function singleton($abstract, $concrete = null);
 
     /**
-     * Register an existing instance as shared in the container.
+     * Get container instance
      *
-     * @param string $abstract
-     * @param mixed $instance
+     * @return mixed
+     */
+    public static function getInstance(): Container;
+
+    /**
+     * 注册实例
+     *
+     * @param $abstract
+     * @param $instance
      * @return mixed
      */
     public function instance($abstract, $instance);
 
     /**
-     * Clear container instance
+     * 清空容器中实例
+     *
      * @return mixed
      */
     public function flush();
@@ -42,4 +50,39 @@ interface Container extends ContainerInterface
      * @return array
      */
     public function getNames(): array;
+
+    /**
+     * 创建实例
+     *
+     * @param $abstract
+     * @param $parameters
+     * @return mixed
+     */
+    public function make($abstract, $parameters);
+
+    /**
+     * 获取抽象具体
+     *
+     * @param $abstract
+     * @return mixed
+     */
+    public function getConcrete($abstract);
+
+    /**
+     * 构建实例
+     *
+     * @param $concrete
+     * @return mixed
+     */
+    public function build($concrete);
+
+    /**
+     * $abstract 与 $concrete绑定
+     *
+     * @param $abstract
+     * @param null $concrete
+     * @param bool $shared
+     * @return mixed
+     */
+    public function bind($abstract, $concrete = null, $shared = true);
 }
