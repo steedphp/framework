@@ -16,7 +16,6 @@ class Application implements ApplicationContract
      */
     const VERSION = '0.0.1';
 
-
     public function __construct()
     {
         $this->registerSingleton();
@@ -27,7 +26,7 @@ class Application implements ApplicationContract
     protected function initialize()
     {
         $swooleServer = Container::getInstance()->get(\Steed\Contracts\Swoole\SwooleManager::class);
-
+        $swooleServer->createSwooleServer(9001, 'WEB_SERVER', $address = '0.0.0.0', []);
         $this->registerDefaultSwooleEvent($swooleServer);
     }
 
