@@ -39,5 +39,10 @@ class Application implements ApplicationContract
         }
     }
 
+    protected function registerDefaultSwooleEvent()
+    {
+
+    }
+
 
 }
