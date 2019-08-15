@@ -1,6 +1,6 @@
 <?php
 
-namespace Steed\Container;
+namespace Steed\Foundation;
 
 use Steed\Contracts\Foundation\Application as ApplicationContract;
 use Steed\Swoole\SwooleEvent;
