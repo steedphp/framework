@@ -5,6 +5,7 @@ namespace Steed\Container;
 use ReflectionClass;
 use Steed\Contracts\Container as ContainerContracts;
 use Steed\Exception\BindingResolutionException;
+use Steed\Exception\EntryNotFoundException;
 
 class Container implements ContainerContracts
 {
@@ -21,8 +22,11 @@ class Container implements ContainerContracts
      */
     protected $instances = [];
 
+    /**
+     * $bindings
+     * @var array
+     */
     protected $bindings = [];
-
 
     private function __construct()
     {
@@ -86,17 +90,59 @@ class Container implements ContainerContracts
 
     public function get($abstract)
     {
-
+        try {
+            return $this->make($abstract);
+        } catch (BindingResolutionException $bindingResolutionException) {
+            throw new EntryNotFoundException($abstract);
+        }
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param $abstract
+     * @return bool
+     */
     public function has($abstract)
     {
-
+        return isset($this->bindings[$abstract]) ||
+            isset($this->instances[$abstract]);
     }
 
-    public function make($abstract, $parameters = [])
+    /**
+     * 创建实例
+     *
+     * @param string $abstract
+     * @param array $parameters
+     * @return mixed|object|void
+     */
+    public function make(string $abstract, array $parameters = [])
     {
+        $concrete = $this->getConcrete($abstract);
 
+        if (isset($this->instances[$abstract])) {
+            return $this->instances[$abstract];
+        }
+
+        $object = $this->build($concrete);
+        if ($this->isShared($abstract)) {
+            $this->instances[$abstract] = $object;
+        }
+
+        return $object;
+    }
+
+    /**
+     * Determine if a given type is shared.
+     *
+     * @param $abstract
+     * @return bool
+     */
+    public function isShared(string $abstract): bool
+    {
+        return isset($this->instances[$abstract]) ||
+            (isset($this->bindings[$abstract]['shared']) &&
+                $this->bindings[$abstract]['shared'] === true);
     }
 
     public function build($concrete)
@@ -119,6 +165,32 @@ class Container implements ContainerContracts
     {
         $message = "Target [$concrete] is not instantiable.";
         throw new BindingResolutionException($message);
+    }
+
+    /**
+     * Flush the container of all bindings and resolved instances.
+     */
+    public function flush(): void
+    {
+        $this->instances = [];
+        $this->bindings = [];
+        return;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStats(): array
+    {
+        return $this->bindings;
+    }
+
+    /**
+     * @return array
+     */
+    public function getNames(): array
+    {
+        return array_keys($this->instances);
     }
 
 }
