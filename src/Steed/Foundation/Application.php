@@ -17,12 +17,26 @@ class Application implements ApplicationContract
 
     public function __construct()
     {
+        $this->registerSingleton();
+        $this->initialize();
     }
 
 
     protected function initialize()
     {
+        $swooleServer = Container::getInstance()->get(\Steed\Contracts\Swoole\SwooleManager::class);
 
+
+    }
+
+    protected function registerSingleton()
+    {
+        foreach (
+            [
+                \Steed\Contracts\Swoole\SwooleManager::class => \Steed\Swoole\SwooleManager::class,
+            ] as $abstract => $concrete) {
+            Container::getInstance()->singleton($abstract, $concrete);
+        }
     }
 
 
