@@ -14,7 +14,7 @@ interface Container extends ContainerInterface
      * @param \Closure|string|null $concrete
      * @return void
      */
-    public function singleton($abstract, $concrete = null);
+    public function singleton(string $abstract, $concrete = null);
 
     /**
      * Get container instance
@@ -58,7 +58,7 @@ interface Container extends ContainerInterface
      * @param $parameters
      * @return mixed
      */
-    public function make($abstract, $parameters);
+    public function make(string $abstract, array $parameters);
 
     /**
      * 获取抽象具体
@@ -84,5 +84,5 @@ interface Container extends ContainerInterface
      * @param bool $shared
      * @return mixed
      */
-    public function bind($abstract, $concrete = null, $shared = true);
+    public function bind(string $abstract, string $concrete = null, $shared = true);
 }

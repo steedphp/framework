@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Steed\\": "src/"
+            "Steed\\": "src/Steed/"
         }
     }
 }

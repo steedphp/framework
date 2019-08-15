@@ -3,7 +3,7 @@
 namespace Steed\Container;
 
 use ReflectionClass;
-use Steed\Contracts\Container as ContainerContracts;
+use Steed\Contracts\Container\Container as ContainerContracts;
 use Steed\Exception\BindingResolutionException;
 use Steed\Exception\EntryNotFoundException;
 
@@ -37,13 +37,18 @@ class Container implements ContainerContracts
      * @access public
      * @return static
      */
-    public static function getInstance()
+    public static function getInstance(): ContainerContracts
     {
         if (is_null(static::$instance)) {
             static::$instance = new static;
         }
 
         return static::$instance;
+    }
+
+    public function instance($abstract, $instance)
+    {
+
     }
 
     /**
@@ -53,7 +58,7 @@ class Container implements ContainerContracts
      * @param string|null $concrete
      * @param bool $shared 是否单例
      */
-    public function bind(string $abstract, string $concrete = null, $shared = true): void
+    public function bind(string $abstract, string $concrete = null, $shared = true)
     {
         if (is_null($concrete)) {
             $concrete = $abstract;

@@ -2,6 +2,8 @@
 
 namespace Steed\Foundation;
 
+use http\Env\Response;
+use Steed\Container\Container;
 use Steed\Contracts\Foundation\Application as ApplicationContract;
 use Steed\Swoole\SwooleEvent;
 use Swoole\Server;
@@ -27,7 +29,8 @@ class Application implements ApplicationContract
     {
         $swooleServer = Container::getInstance()->get(\Steed\Contracts\Swoole\SwooleManager::class);
         $swooleServer->createSwooleServer(9001, 'WEB_SERVER', $address = '0.0.0.0', []);
-        $this->registerDefaultSwooleEvent($swooleServer);
+        $this->registerDefaultSwooleEvent($swooleServer->getSwooleServer());
+        $swooleServer->start();
     }
 
     protected function registerSingleton()
@@ -47,6 +50,10 @@ class Application implements ApplicationContract
         foreach ($swooleEvent->event as $event) {
             $server->on($event, [$swooleEvent, $event]);
         }
+//TODO http server event
+        $server->on('request', function ($request, $response) {
+            $response->end('hello word');
+        });
     }
 
 
