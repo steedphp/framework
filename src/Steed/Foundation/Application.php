@@ -2,7 +2,6 @@
 
 namespace Steed\Foundation;
 
-use http\Env\Response;
 use Steed\Container\Container;
 use Steed\Contracts\Foundation\Application as ApplicationContract;
 use Steed\Swoole\SwooleEvent;
@@ -25,8 +24,10 @@ class Application implements ApplicationContract
     }
 
 
-    protected function initialize()
+    protected function initialize(): void
     {
+        Container::getInstance()->get(\Steed\Contracts\Config\Config::class);
+
         $swooleServer = Container::getInstance()->get(\Steed\Contracts\Swoole\SwooleManager::class);
         $swooleServer->createSwooleServer(9001, 'WEB_SERVER', $address = '0.0.0.0', []);
         $this->registerDefaultSwooleEvent($swooleServer->getSwooleServer());
@@ -38,6 +39,7 @@ class Application implements ApplicationContract
         foreach (
             [
                 \Steed\Contracts\Swoole\SwooleManager::class => \Steed\Swoole\SwooleManager::class,
+                \Steed\Contracts\Config\Config::class => \Steed\Config\Config::class,
             ] as $abstract => $concrete) {
             Container::getInstance()->singleton($abstract, $concrete);
         }
@@ -52,7 +54,10 @@ class Application implements ApplicationContract
         }
 //TODO http server event
         $server->on('request', function ($request, $response) {
-            $response->end('hello word');
+
+            $config = Container::getInstance()->get(\Steed\Contracts\Config\Config::class);
+            $data = json_encode($config->all());
+            $response->end($data);
         });
     }
 
