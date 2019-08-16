@@ -17,7 +17,7 @@ class Config implements ConfigContracts
     public function __construct(string $path = '', string $configExt = 'php')
     {
         //TODO $path 动态配置
-        $this->path = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'config';
+        $this->path = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
         $this->configExt = $configExt;
 
         $this->initialize();
@@ -107,8 +107,10 @@ class Config implements ConfigContracts
 
             if (count($key) == 2) {
                 $this->config[strtolower($key[0])][$key[1]] = $value;
-            } else {
+            } elseif (count($key) == 3) {
                 $this->config[strtolower($key[0])][$key[1]][$key[2]] = $value;
+            } else {
+                $this->config[strtolower($key[0])] = $value;
             }
 
             return $value;
