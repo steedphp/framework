@@ -17,7 +17,7 @@ class Config implements ConfigContracts
     public function __construct(string $path = '', string $configExt = 'php')
     {
         //TODO $path 动态配置
-        $this->path = dirname(dirname(dirname(__DIR__)));
+        $this->path = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'config';
         $this->configExt = $configExt;
 
         $this->initialize();
@@ -28,7 +28,7 @@ class Config implements ConfigContracts
         //读取配置文件并加载
         $files = isset($this->path) ? scandir($this->path) : [];
         foreach ($files as $file) {
-            if ('.' . pathinfo($file, PATHINFO_EXTENSION) === $this->configExt) {
+            if (pathinfo($file, PATHINFO_EXTENSION) === $this->configExt) {
                 $this->loadFile($this->path . $file, pathinfo($file, PATHINFO_FILENAME));
             }
         }
