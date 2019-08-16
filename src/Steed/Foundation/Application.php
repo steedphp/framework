@@ -56,7 +56,7 @@ class Application implements ApplicationContract
         $server->on('request', function ($request, $response) {
 
             $config = Container::getInstance()->get(\Steed\Contracts\Config\Config::class);
-            $data = json_encode($config->all());
+            $data = json_encode($config->get('app.index.config'));
             $response->end($data);
         });
     }
