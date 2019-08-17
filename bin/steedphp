@@ -1,0 +1,8 @@
+<?php
+include_once "bootstrap.php";
+
+defined('ROOT_PATH') or define('ROOT_PATH', dirname(__DIR__));
+defined('RUNTIME_PATH') or define('RUNTIME_PATH', ROOT_PATH . DIRECTORY_SEPARATOR . 'runtime');
+
+$app = new \Steed\Foundation\Application();
+

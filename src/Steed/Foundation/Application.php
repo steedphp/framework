@@ -4,6 +4,9 @@ namespace Steed\Foundation;
 
 use Steed\Container\Container;
 use Steed\Contracts\Foundation\Application as ApplicationContract;
+use Steed\Http\Dispatcher;
+use Steed\Http\Request;
+use Steed\Http\Response;
 use Steed\Swoole\SwooleEvent;
 use Swoole\Server;
 
@@ -26,10 +29,15 @@ class Application implements ApplicationContract
 
     protected function initialize(): void
     {
-        Container::getInstance()->get(\Steed\Contracts\Config\Config::class);
+        $config = Container::getInstance()->get(\Steed\Contracts\Config\Config::class);
 
         $swooleServer = Container::getInstance()->get(\Steed\Contracts\Swoole\SwooleManager::class);
-        $swooleServer->createSwooleServer(9001, 'WEB_SERVER', $address = '0.0.0.0', []);
+        $swooleServer->createSwooleServer(
+            $config->get('app.server_port'),
+            $config->get('app.server_type'),
+            $config->get('app.server_address'),
+            []
+        );
         $this->registerDefaultSwooleEvent($swooleServer->getSwooleServer());
         $swooleServer->start();
     }
@@ -52,13 +60,27 @@ class Application implements ApplicationContract
         foreach ($swooleEvent->event as $event) {
             $server->on($event, [$swooleEvent, $event]);
         }
-//TODO http server event
-        $server->on('request', function ($request, $response) {
 
-            $config = Container::getInstance()->get(\Steed\Contracts\Config\Config::class);
-            $data = json_encode($config->get('app.index.config'));
-            $response->end($data);
-        });
+        $config = Container::getInstance()->get(\Steed\Contracts\Config\Config::class);
+        if ($config->get('app.server_type') == 'WEB_SERVER') {
+
+            $dispatcher = new Dispatcher();
+
+            $server->on('request', function ($request, $response) use ($dispatcher) {
+                $request = new Request($request);
+                $response = new Response($response);
+
+                $dispatcher->dispatch($request, $response);
+                $config = Container::getInstance()->get(\Steed\Contracts\Config\Config::class);
+                $data = json_encode($config->get('app.index.config'));
+
+                $response->__response();
+            });
+
+        }
+
+        //TODO websocket event
+
     }
 
 
