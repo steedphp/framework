@@ -16,7 +16,7 @@ class Dispatcher
 
     function __construct(int $maxDepth = 5, int $maxPoolNum = 200)
     {
-        $this->controllerNameSpaceBase = 'App\\';
+        $this->controllerNameSpaceBase = '\\App\\Http\\Controller';
         $this->maxPoolNum = $maxPoolNum;
     }
 
