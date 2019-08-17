@@ -17,7 +17,7 @@ class Config implements ConfigContracts
     public function __construct(string $path = '', string $configExt = 'php')
     {
         //TODO $path 动态配置
-        $this->path = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
+        $this->path = CONFIG_PATH . DIRECTORY_SEPARATOR;
         $this->configExt = $configExt;
 
         $this->initialize();
