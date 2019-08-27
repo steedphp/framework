@@ -34,6 +34,7 @@ class Container implements ContainerContracts
 
     /**
      * 获取当前容器的实例（单例）
+     *
      * @access public
      * @return static
      */
@@ -85,6 +86,7 @@ class Container implements ContainerContracts
 
     /**
      * 绑定单例模式
+     *
      * @param string $abstract
      * @param null $concrete
      */

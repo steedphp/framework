@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Steed\Config;
 
 use Steed\Contracts\Config\Config as ConfigContracts;
