@@ -41,7 +41,7 @@ class Container implements ContainerContracts
     public static function getInstance(): ContainerContracts
     {
         if (is_null(static::$instance)) {
-            static::$instance = new static;
+            static::$instance = new self();
         }
 
         return static::$instance;
