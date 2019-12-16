@@ -6,6 +6,7 @@ use ReflectionClass;
 use Steed\Contracts\Container\Container as ContainerContracts;
 use Steed\Exception\BindingResolutionException;
 use Steed\Exception\EntryNotFoundException;
+use Steed\Exception\InvalidArgumentException;
 
 class Container implements ContainerContracts
 {
@@ -21,12 +22,6 @@ class Container implements ContainerContracts
      * @var
      */
     protected $instances = [];
-
-    /**
-     * $bindings
-     * @var array
-     */
-    protected $bindings = [];
 
     private function __construct()
     {
@@ -47,50 +42,6 @@ class Container implements ContainerContracts
         return static::$instance;
     }
 
-
-    /**
-     * 绑定到容器中
-     *
-     * @param string $abstract
-     * @param string|null $concrete
-     * @param bool $shared 是否单例
-     */
-    public function bind(string $abstract, string $concrete = null, $shared = true)
-    {
-        if (is_null($concrete)) {
-            $concrete = $abstract;
-        }
-
-        $this->bindings[$abstract] = compact('concrete', 'shared');
-        return;
-    }
-
-    /**
-     * 获取真实标识
-     *
-     * @param $abstract
-     * @return mixed
-     */
-    public function getConcrete($abstract)
-    {
-        if (isset($this->bindings[$abstract])) {
-            return $this->bindings[$abstract]['concrete'];
-        }
-
-        return $abstract;
-    }
-
-    /**
-     * 绑定单例模式
-     *
-     * @param string $abstract
-     * @param null $concrete
-     */
-    public function singleton(string $abstract, $concrete = null): void
-    {
-        $this->bind($abstract, $concrete, true);
-    }
-
     public function get($abstract)
     {
         try {
@@ -106,10 +57,18 @@ class Container implements ContainerContracts
      * @param $abstract
      * @return bool
      */
-    public function has($abstract)
+    public function has($name)
     {
-        return isset($this->bindings[$abstract]) ||
-            isset($this->instances[$abstract]);
+        if (!is_string($name)) {
+            throw new InvalidArgumentException(sprintf('The name parameter must be of type string, %s given',
+                is_object($name) ? get_class($name) : gettype($name)));
+        }
+
+        if (array_key_exists($name, $this->instances)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -121,31 +80,15 @@ class Container implements ContainerContracts
      */
     public function make(string $abstract, array $parameters = [])
     {
-        $concrete = $this->getConcrete($abstract);
 
         if (isset($this->instances[$abstract])) {
             return $this->instances[$abstract];
         }
 
-        $object = $this->build($concrete);
-        if ($this->isShared($abstract)) {
-            $this->instances[$abstract] = $object;
-        }
+        $object = $this->build($abstract);
+        $this->instances[$abstract] = $object;
 
         return $object;
-    }
-
-    /**
-     * Determine if a given type is shared.
-     *
-     * @param $abstract
-     * @return bool
-     */
-    public function isShared(string $abstract): bool
-    {
-        return isset($this->instances[$abstract]) ||
-            (isset($this->bindings[$abstract]['shared']) &&
-                $this->bindings[$abstract]['shared'] === true);
     }
 
     public function build($concrete)
@@ -168,24 +111,6 @@ class Container implements ContainerContracts
     {
         $message = "Target [$concrete] is not instantiable.";
         throw new BindingResolutionException($message);
-    }
-
-    /**
-     * Flush the container of all bindings and resolved instances.
-     */
-    public function flush(): void
-    {
-        $this->instances = [];
-        $this->bindings = [];
-        return;
-    }
-
-    /**
-     * @return array
-     */
-    public function getStats(): array
-    {
-        return $this->bindings;
     }
 
     /**

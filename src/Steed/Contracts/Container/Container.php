@@ -15,19 +15,6 @@ interface Container extends ContainerInterface
     public static function getInstance(): Container;
 
     /**
-     * 清空容器中实例
-     *
-     * @return mixed
-     */
-    public function flush();
-
-    /**
-     * getStats
-     * @return array
-     */
-    public function getStats(): array;
-
-    /**
      * Get all $id
      * @return array
      */
@@ -43,14 +30,6 @@ interface Container extends ContainerInterface
     public function make(string $abstract, array $parameters);
 
     /**
-     * 获取抽象具体
-     *
-     * @param $abstract
-     * @return mixed
-     */
-    public function getConcrete($abstract);
-
-    /**
      * 构建实例
      *
      * @param $concrete
@@ -58,13 +37,5 @@ interface Container extends ContainerInterface
      */
     public function build($concrete);
 
-    /**
-     * $abstract 与 $concrete绑定
-     *
-     * @param $abstract
-     * @param null $concrete
-     * @param bool $shared
-     * @return mixed
-     */
-    public function bind(string $abstract, string $concrete = null, $shared = true);
+
 }
