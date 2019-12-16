@@ -8,15 +8,6 @@ interface Container extends ContainerInterface
 {
 
     /**
-     * 单例注册到容器中
-     *
-     * @param string $abstract
-     * @param \Closure|string|null $concrete
-     * @return void
-     */
-    public function singleton(string $abstract, $concrete = null);
-
-    /**
      * Get container instance
      *
      * @return mixed
