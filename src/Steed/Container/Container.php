@@ -47,10 +47,6 @@ class Container implements ContainerContracts
         return static::$instance;
     }
 
-    public function instance($abstract, $instance)
-    {
-
-    }
 
     /**
      * 绑定到容器中

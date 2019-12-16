@@ -15,15 +15,6 @@ interface Container extends ContainerInterface
     public static function getInstance(): Container;
 
     /**
-     * 注册实例
-     *
-     * @param $abstract
-     * @param $instance
-     * @return mixed
-     */
-    public function instance($abstract, $instance);
-
-    /**
      * 清空容器中实例
      *
      * @return mixed
