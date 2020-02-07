@@ -26,7 +26,6 @@ class Dispatcher
 
         $request->getUri()->withPath($path);
 
-
         $this->controllerHandler($request, $response, $path);
 
     }

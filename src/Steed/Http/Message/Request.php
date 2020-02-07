@@ -2,7 +2,6 @@
 
 namespace Steed\Http\Message;
 
-
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 
