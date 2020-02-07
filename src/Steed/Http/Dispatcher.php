@@ -79,7 +79,7 @@ class Dispatcher
                 }
             }
         } else {
-            $content = '<h1>hello word</h1>';
+            $content = '<h1>hello steed</h1>';
             $response->write($content);
         }
     }
