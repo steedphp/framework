@@ -39,7 +39,7 @@ class Config implements ConfigContracts
         $type = pathinfo($filename, PATHINFO_EXTENSION);
 
         if ('php' == $type) {
-            return $this->set($name, include_once "$filename");
+            return $this->set($name, include_once "Config.php");
         }
 
         return true;
