@@ -1,8 +1,6 @@
 <?php
 
-
-namespace Steed\Contracts\Config;
-
+namespace Steed\Framework\Contracts\Config;
 
 interface Config
 {

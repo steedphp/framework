@@ -1,6 +1,6 @@
 <?php
 
-namespace Steed\Contracts\Container;
+namespace Steed\Framework\Contracts\Container;
 
 use Psr\Container\ContainerInterface;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Steed\Contracts\Foundation;
+namespace Steed\Framework\Contracts\Foundation;
 
 interface Application
 {
