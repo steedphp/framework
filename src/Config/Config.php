@@ -1,23 +1,19 @@
 <?php
 
-namespace Steed\Config;
+namespace Steed\Framework\Config;
 
-use Steed\Contracts\Config\Config as ConfigContracts;
+use Steed\Framework\Contracts\Config\Config as ConfigContracts;
 
 class Config implements ConfigContracts
 {
-    private $config = [];
+    private $configs = [];
 
 
-    protected $path;
 
-    protected $configExt;
 
-    public function __construct(string $path = '', string $configExt = 'php')
+    public function __construct(array $configs = [])
     {
-        //TODO $path 动态配置
-        $this->path = CONFIG_PATH . DIRECTORY_SEPARATOR;
-        $this->configExt = $configExt;
+        $this->configs = $configs;
 
         $this->initialize();
     }
