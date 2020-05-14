@@ -5,10 +5,10 @@ namespace Steed\Framework\Config;
 use Steed\Framework\Contracts\Config\Config as ConfigContracts;
 
 /**
- * Class Config
- * @package Steed\Framework\Config
+ * Class Repository
+ * @package Steed\Framework\Repository
  */
-class Config implements ConfigContracts
+class Repository implements ConfigContracts
 {
     /**
      * @var array
@@ -16,7 +16,7 @@ class Config implements ConfigContracts
     private $configs;
 
     /**
-     * Config constructor.
+     * Repository constructor.
      * @param array $configs
      */
     public function __construct(array $configs = [])
