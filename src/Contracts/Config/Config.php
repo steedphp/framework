@@ -5,11 +5,11 @@ namespace Steed\Framework\Contracts\Config;
 interface Config
 {
 
-    public function has($key): bool;
+    public function has(string $key): bool;
 
-    public function get($key, $default);
+    public function get(string $key, $default);
 
-    public function set($key, $value = null);
+    public function set(string $key, $value = null);
 
 
 }
