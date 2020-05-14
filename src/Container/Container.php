@@ -1,13 +1,16 @@
 <?php
 
-namespace Steed\Container;
+namespace Steed\Framework\Container;
 
+use Steed\Framework\Contracts\Container\Container as ContainerContracts;
+use Steed\Framework\Exception\ContainerExceptionInterface;
+use Steed\Framework\Exception\NotFoundExceptionInterface;
 use ReflectionClass;
-use Steed\Contracts\Container\Container as ContainerContracts;
-use Steed\Exception\BindingResolutionException;
-use Steed\Exception\EntryNotFoundException;
-use Steed\Exception\InvalidArgumentException;
 
+/**
+ * Class Container
+ * @package Steed\Framework\Container
+ */
 class Container implements ContainerContracts
 {
 
@@ -28,26 +31,21 @@ class Container implements ContainerContracts
     }
 
     /**
-     * 获取当前容器的实例（单例）
+     * Finds an entry of the container by its identifier and returns it.
      *
-     * @access public
-     * @return static
+     * @param string $id Identifier of the entry to look for.
+     *
+     * @return mixed Entry.
+     * @throws ContainerExceptionInterface Error while retrieving the entry.
+     *
+     * @throws NotFoundExceptionInterface  No entry was found for **this** identifier.
      */
-    public static function getInstance(): ContainerContracts
-    {
-        if (is_null(static::$instance)) {
-            static::$instance = new self();
-        }
-
-        return static::$instance;
-    }
-
-    public function get($abstract)
+    public function get($id)
     {
         try {
-            return $this->make($abstract);
-        } catch (BindingResolutionException $bindingResolutionException) {
-            throw new EntryNotFoundException($abstract);
+            return $this->make($id);
+        } catch (ContainerExceptionInterface $bindingResolutionException) {
+            throw new NotFoundExceptionInterface($id);
         }
     }
 
@@ -105,12 +103,12 @@ class Container implements ContainerContracts
      * Throw an exception that the concrete is not instantiable.
      *
      * @param $concrete
-     * @throws BindingResolutionException
+     * @throws ContainerExceptionInterface
      */
     protected function notInstantiable($concrete)
     {
         $message = "Target [$concrete] is not instantiable.";
-        throw new BindingResolutionException($message);
+        throw new ContainerExceptionInterface($message);
     }
 
     /**

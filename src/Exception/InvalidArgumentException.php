@@ -1,6 +1,6 @@
 <?php
 
-namespace Steed\Exception;
+namespace Steed\Framework\Exception;
 
 
 class InvalidArgumentException extends  \InvalidArgumentException
