@@ -61,7 +61,7 @@ class Container implements ContainerContracts
     public function get($id)
     {
         try {
-            return $this->make($id);
+            return $this->resolve($id);
         } catch (ContainerExceptionInterface $bindingResolutionException) {
             throw new NotFoundExceptionInterface($id);
         }
@@ -88,13 +88,11 @@ class Container implements ContainerContracts
     }
 
     /**
-     * 创建实例
-     *
      * @param string $abstract
      * @param array $parameters
      * @return mixed|object|void
      */
-    public function make(string $abstract, array $parameters = [])
+    public function resolve(string $abstract, array $parameters = [])
     {
 
         if (isset($this->instances[$abstract])) {
@@ -129,12 +127,5 @@ class Container implements ContainerContracts
         throw new ContainerExceptionInterface($message);
     }
 
-    /**
-     * @return array
-     */
-    public function getNames(): array
-    {
-        return array_keys($this->instances);
-    }
 
 }
