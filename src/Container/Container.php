@@ -32,6 +32,18 @@ class Container implements ContainerContracts
      */
     protected $instances = [];
 
+    /**
+     * get container instance
+     * @return ContainerContracts
+     */
+    public static function getInstance() : ContainerContracts
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
     private function __construct()
     {
     }
