@@ -21,6 +21,12 @@ class Container implements ContainerContracts
     protected static $instance;
 
     /**
+     * 依赖关系
+     * @var array
+     */
+    protected $dependencies = [];
+
+    /**
      * $instances
      * @var
      */
