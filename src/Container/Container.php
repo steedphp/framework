@@ -4,6 +4,7 @@ namespace Steed\Framework\Container;
 
 use Steed\Framework\Contracts\Container\Container as ContainerContracts;
 use Steed\Framework\Exception\ContainerExceptionInterface;
+use Steed\Framework\Exception\InvalidArgumentException;
 use Steed\Framework\Exception\NotFoundExceptionInterface;
 use ReflectionClass;
 
@@ -36,7 +37,7 @@ class Container implements ContainerContracts
      * get container instance
      * @return ContainerContracts
      */
-    public static function getInstance() : ContainerContracts
+    public static function getInstance(): ContainerContracts
     {
         if (is_null(self::$instance)) {
             self::$instance = new self();
@@ -49,6 +50,7 @@ class Container implements ContainerContracts
     }
 
     /**
+     * {@inheritdoc}
      * Finds an entry of the container by its identifier and returns it.
      *
      * @param string $id Identifier of the entry to look for.
@@ -69,40 +71,47 @@ class Container implements ContainerContracts
 
     /**
      * {@inheritdoc}
-     *
-     * @param $abstract
+     * @param string $name
      * @return bool
      */
-    public function has($name)
+    public function has($name): bool
     {
         if (!is_string($name)) {
             throw new InvalidArgumentException(sprintf('The name parameter must be of type string, %s given',
                 is_object($name) ? get_class($name) : gettype($name)));
         }
 
-        if (array_key_exists($name, $this->instances)) {
-            return true;
-        } else {
-            return false;
-        }
+        return isset($this->instances[$name]) || isset($this->dependencies[$name]);
     }
 
     /**
-     * @param string $abstract
+     * @param string $name
      * @param array $parameters
      * @return mixed|object|void
      */
-    public function resolve(string $abstract, array $parameters = [])
+    public function resolve(string $name, array $parameters = [])
     {
 
-        if (isset($this->instances[$abstract])) {
-            return $this->instances[$abstract];
+        if (isset($this->instances[$name])) {
+            return $this->instances[$name];
         }
 
-        $object = $this->build($abstract);
-        $this->instances[$abstract] = $object;
+        $object = $this->build($name);
+        $this->instances[$name] = $object;
 
         return $object;
+    }
+
+    /**
+     * @param string $name
+     * @return string
+     */
+    public function getDependence(string $name): string
+    {
+        if (!isset($this->dependencies[$name])) {
+            return $name;
+        }
+        return $this->dependencies[$name];
     }
 
     public function build($concrete)
