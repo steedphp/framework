@@ -116,10 +116,20 @@ class Container implements ContainerContracts
 
     public function build($concrete)
     {
+        $concrete = $this->getDependence($concrete);
+
         $reflector = new ReflectionClass($concrete);
         if (!$reflector->isInstantiable()) {
             return $this->notInstantiable($concrete);
         }
+
+        $constructorMethod = $reflector->getConstructor();
+        if ($constructorMethod !== null) {
+            $constructorMethod->getParameters();
+        }
+
+
+
 
         return $reflector->newInstanceArgs();
     }
