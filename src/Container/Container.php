@@ -2,11 +2,12 @@
 
 namespace Steed\Framework\Container;
 
+use ReflectionClass;
+use ReflectionMethod;
 use Steed\Framework\Contracts\Container\Container as ContainerContracts;
 use Steed\Framework\Exception\ContainerExceptionInterface;
 use Steed\Framework\Exception\InvalidArgumentException;
 use Steed\Framework\Exception\NotFoundExceptionInterface;
-use ReflectionClass;
 
 /**
  * Class Container
@@ -89,14 +90,13 @@ class Container implements ContainerContracts
      * @param array $parameters
      * @return mixed|object|void
      */
-    public function resolve(string $name, array $parameters = [])
+    public function resolve(string $name, array $parameters = []): object
     {
-
         if (isset($this->instances[$name])) {
             return $this->instances[$name];
         }
 
-        $object = $this->build($name);
+        $object = $this->build($name, $parameters);
         $this->instances[$name] = $object;
 
         return $object;
@@ -114,7 +114,7 @@ class Container implements ContainerContracts
         return $this->dependencies[$name];
     }
 
-    public function build($concrete)
+    public function build($concrete, $parameter)
     {
         $concrete = $this->getDependence($concrete);
 
@@ -124,14 +124,45 @@ class Container implements ContainerContracts
         }
 
         $constructorMethod = $reflector->getConstructor();
+        $args = [];
         if ($constructorMethod !== null) {
-            $constructorMethod->getParameters();
+
+            $args = $this->buildParameters($constructorMethod, $parameter);
         }
 
+        return $reflector->newInstanceArgs($args);
+    }
 
+    /**
+     * @param ReflectionMethod $reflectionMethod
+     * @param array $parameter
+     * @return array
+     * @throws \ReflectionException
+     */
+    public function buildParameters(ReflectionMethod $reflectionMethod, $parameter = []): array
+    {
+        $args = [];
+        if ($reflectionMethod->getNumberOfParameters() == 0) {
+            return $args;
+        }
 
+        $parameters = $reflectionMethod->getParameters();
+        $parameterName = $reflectionMethod->getName();
+        foreach ($parameters as $parameter) {
+            if ($parameter->getClass()) {
+                $className = $parameter->getClass()->getName();
+                $className = $this->getDependence($className);
+                $args[] = $this->resolve($className);
+            } elseif ($parameter->isDefaultValueAvailable()) {
+                $args[] = $parameter->getDefaultValue();
+            } elseif (isset($parameter[$parameterName])) {
+                $args[] = $parameter[$parameterName];
+            } else {
+                throw new InvalidArgumentException();
+            }
+        }
 
-        return $reflector->newInstanceArgs();
+        return $args;
     }
 
     /**
