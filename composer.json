@@ -13,13 +13,13 @@
     ],
     "require": {
         "php": ">=7.2.0",
-        "ext-swoole": ">=4.4.3",
         "psr/container": "^1.0",
         "psr/http-message": "^1.0.1",
         "psr/http-server-middleware": "^1.0",
         "psr/log": "^1.1",
         "psr/event-dispatcher": "^0.7",
-        "swoole/ide-helper": "~4.3.3"
+        "swoole/ide-helper": "~4.3.3",
+        "phpunit/phpunit": "^9.1"
     },
     "autoload": {
         "psr-4": {
